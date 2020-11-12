@@ -3,11 +3,13 @@ package com.pukasoft.springDesdeCero.controllers;
 
 import com.pukasoft.springDesdeCero.models.User;
 import com.pukasoft.springDesdeCero.services.UserService;
+import com.pukasoft.springDesdeCero.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -15,6 +17,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     //@GetMapping("/hola")
     //Trae todos los usuarios
@@ -32,9 +37,9 @@ public class UserController {
 
     //Registro un usuario
     @RequestMapping(value = "/",method = RequestMethod.POST)
-    User registrer(@RequestBody User user){
+    void registrer(@RequestBody User user){
         //TODO : Regitrar en la base de datos
-        return userService.registrer(user);
+        userService.registrer(user);
     }
 
     //Actualizar un usuario
@@ -51,6 +56,19 @@ public class UserController {
         userService.delete(id);
     }
 
+
+    @RequestMapping(value = "/login", method =RequestMethod.POST)
+    Map<String,Object> login(@RequestBody User dto){
+        User user = userService.login(dto);
+
+    Map<String,Object> result = new HashMap<>();
+    if (user !=null){
+        String token = jwtUtil.create(String.valueOf(user.getId()),user.getEmail());
+        result.put("token",token);
+        result.put("user",user);
+    }
+    return result;
+    }
 
 
 }

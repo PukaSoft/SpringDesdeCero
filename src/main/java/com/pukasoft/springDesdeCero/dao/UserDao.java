@@ -26,5 +26,7 @@ public interface UserDao {
     //Eliminarr un usuario
     void delete(long id);
 
+    public User login(User user);
+
 
 }

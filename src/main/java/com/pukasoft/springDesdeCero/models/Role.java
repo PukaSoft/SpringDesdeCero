@@ -1,13 +1,20 @@
 package com.pukasoft.springDesdeCero.models;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "role")
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role extends BaseEntity {
 
     @Column(name = "nombre")
+    @Getter @Setter
     private String nombre;
 
 
@@ -15,13 +22,9 @@ public class Role extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,mappedBy = "role")
+    @Getter @Setter
     private Set<Permiso> permisos;
 
-    public String getNombre() {
-        return nombre;
-    }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+
 }
